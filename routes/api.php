@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoomController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,7 +24,18 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('tes', function () {
-        return "Tes";
+
+    Route::get('/author', function () {
+        return "Andi";
     });
+
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::post('login', [AuthController::class, 'login']);
+    });
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::resource('room', RoomController::class); 
+    });
+
 });
